@@ -1,5 +1,10 @@
 // controller/authController.js
-const { admin, firebase } = require("../firebase-config"); // Mengimpor konfigurasi Firebase
+// controller/authController.js
+const {
+  auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} = require("../firebase-config"); // Mengimpor Firebase dengan cara modular
 
 // Fungsi untuk registrasi pengguna
 const registerUser = async (req, res) => {
@@ -11,12 +16,14 @@ const registerUser = async (req, res) => {
 
   try {
     // Mendaftar pengguna baru
-    const userRecord = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     res
       .status(201)
-      .json({ message: "User berhasil terdaftar", user: userRecord.user });
+      .json({ message: "User berhasil terdaftar", user: userCredential.user });
   } catch (error) {
     console.error("Error creating new user:", error);
     res
@@ -35,17 +42,16 @@ const loginUser = async (req, res) => {
 
   try {
     // Login pengguna
-    const userCredential = await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
-
-    // Dapatkan ID token untuk autentikasi lebih lanjut
-    const idToken = await user.getIdToken();
 
     res.status(200).json({
       message: "Login berhasil",
-      token: idToken, // Kirimkan token ID untuk digunakan di client-side
+      token: await user.getIdToken(), // Ambil ID token untuk autentikasi
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -53,23 +59,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Fungsi untuk memverifikasi token pengguna
-const verifyToken = async (req, res) => {
-  const { token } = req.body;
-
-  if (!token) {
-    return res.status(400).json({ message: "Token diperlukan" });
-  }
-
-  try {
-    // Verifikasi ID token
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    res.status(200).json({ message: "Token valid", decodedToken });
-  } catch (error) {
-    res
-      .status(401)
-      .json({ message: "Token tidak valid", error: error.message });
-  }
-};
-
-module.exports = { registerUser, loginUser, verifyToken };
+module.exports = { registerUser, loginUser };

@@ -1,20 +1,12 @@
 // routes/authRoutes.js
 const express = require("express");
-const {
-  registerUser,
-  loginUser,
-  verifyToken,
-} = require("../controller/authController"); // Mengimpor controller
-
 const router = express.Router();
+const { registerUser, loginUser } = require("../controller/authController"); // Mengimpor controller
 
-// Endpoint untuk registrasi pengguna baru
+// Route untuk registrasi
 router.post("/register", registerUser);
 
-// Endpoint untuk login pengguna
+// Route untuk login
 router.post("/login", loginUser);
-
-// Endpoint untuk memverifikasi token
-router.post("/verify-token", verifyToken);
 
 module.exports = router;
