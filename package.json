@@ -5,5 +5,17 @@
     "firebase": "^11.0.2",
     "firebase-admin": "^13.0.0",
     "mysql2": "^3.11.4"
-  }
+  },
+  "name": "capstone_backend",
+  "version": "1.0.0",
+  "main": "firebase-config.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
