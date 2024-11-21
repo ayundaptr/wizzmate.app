@@ -1,12 +1,12 @@
-// routes/authRoutes.js
 const express = require("express");
+const { register, login } = require("../controller/authController"); // Import fungsi handler
+
 const router = express.Router();
-const { registerUser, loginUser } = require("../controller/authController"); // Mengimpor controller
 
 // Route untuk registrasi
-router.post("/register", registerUser);
+router.post("/register", register);
 
 // Route untuk login
-router.post("/login", loginUser);
+router.post("/login", login);
 
 module.exports = router;
